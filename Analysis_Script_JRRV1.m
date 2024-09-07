@@ -5,25 +5,64 @@ initCobraToolbox(false)
 
 %% Key sensitivity parameters
 
-BacteroidNGAM = 3 %(VARY FOR SENSITIVITY)
-PlantGAM = 19 %(VARY FOR SENSITIVITY)
-PlantNGAM = 0.204 %(VARY FOR SENSITIVITY)
-RootNGAM = 7.36 %(VARY FOR SENSITIVITY)
+% parameters used to perform SA
+global BacteroidNGAM PlantGAM PlantNGAM RootNGAM
+global ShootProportion RootProportion PlantProportion NoduleProportion
+global AMF_N_Benefit AMF_P_Benefit NecessaryAMFBiomass AMFGAM AMFNGAM
+global TransportCost
 
-ShootProportion = 0.9 %(VARY FOR SENSITIVITY)
-RootProportion = 1 - ShootProportion %(VARY FOR SENSITIVITY)
-PlantProportion = 0.98 %(VARY FOR SENSITIVITY)
-NoduleProportion = 1 - PlantProportion %(VARY FOR SENSITIVITY)
+% Outputs for SA
+global RGR_values_combined
+global CO2_levels
 
-AMF_N_Benefit = 0.23 %(VARY FOR SENSITIVITY)
-AMF_P_Benefit = 2.16 %(VARY FOR SENSITIVITY)
-NecessaryAMFBiomass = 0.0972 %(VARY FOR SENSITIVITY)
-AMFGAM = 60 %(VARY FOR SENSITIVITY)
-AMFNGAM = 3.2 %(VARY FOR SENSITIVITY)
+global Early_RGR_withBacteroidnoAMF
+global Mid_RGR_withBacteroidnoAMF
+global Late_RGR_withBacteroidnoAMF
+
+global Early_RGR_noBacteroidwithAMF
+global Mid_RGR_noBacteroidwithAMF
+global Late_RGR_noBacteroidwithAMF
+
+global Early_RGR_noBacteroidwithAMF_AMFBiomass 
+global Mid_RGR_noBacteroidwithAMF_AMFBiomass
+global Late_RGR_noBacteroidwithAMF_AMFBiomass 
+
+global Early_RGR_noBacteroidwithAMF_GlucoseFluxes 
+global Mid_RGR_noBacteroidwithAMF_GlucoseFluxes 
+global Late_RGR_noBacteroidwithAMF_GlucoseFluxes 
+
+global Early_RGR_noBacteroidwithAMF_PalmitateFluxes
+global Mid_RGR_noBacteroidwithAMF_PalmitateFluxes 
+global Late_RGR_noBacteroidwithAMF_PalmitateFluxes
+
+global Early_RGR_noBacteroidwithAMF_CO2Fluxes 
+global Mid_RGR_noBacteroidwithAMF_CO2Fluxes 
+global Late_RGR_noBacteroidwithAMF_CO2Fluxes 
+
+global Early_RGR_noBacteroidwithAMF_PFluxes 
+global Mid_RGR_noBacteroidwithAMF_PFluxes 
+global Late_RGR_noBacteroidwithAMF_PFluxes 
+
+
+% BacteroidNGAM = 3 %(VARY FOR SENSITIVITY)
+% PlantGAM = 19 %(VARY FOR SENSITIVITY)
+% PlantNGAM = 0.204 %(VARY FOR SENSITIVITY)
+% RootNGAM = 7.36 %(VARY FOR SENSITIVITY)
+% 
+% ShootProportion = 0.9 %(VARY FOR SENSITIVITY)
+% RootProportion = 1 - ShootProportion %(VARY FOR SENSITIVITY)
+% PlantProportion = 0.98 %(VARY FOR SENSITIVITY)
+% NoduleProportion = 1 - PlantProportion %(VARY FOR SENSITIVITY)
+% 
+% AMF_N_Benefit = 0.23 %(VARY FOR SENSITIVITY)
+% AMF_P_Benefit = 2.16 %(VARY FOR SENSITIVITY)
+% NecessaryAMFBiomass = 0.0972 %(VARY FOR SENSITIVITY)
+% AMFGAM = 60 %(VARY FOR SENSITIVITY)
+% AMFNGAM = 3.2 %(VARY FOR SENSITIVITY)
+% 
+% TransportCost = 0.25 % Generic transport cost for inter-tissue movement of metabolites (VARY FOR SENSITIVITY)
 
 %% Building base Zea mays model
-
-TransportCost = 0.25 % Generic transport cost for inter-tissue movement of metabolites (VARY FOR SENSITIVITY)
 
 Bd_model = readCbModel('BdiazoModel.xml') % Bradyrhizobium diazoefficiens model
 Zm_model = readCbModel('ArabidopsisCoreModel.xml') % Arabidopsis core model that we build the Zea mays model out of
@@ -897,6 +936,7 @@ Early_RGR_withBacteroidnoAMF = {}
 Mid_RGR_withBacteroidnoAMF = {}
 Late_RGR_withBacteroidnoAMF = {}
 
+
 WithBacteroidModel = FullModel
 
 solution = optimizeCbModel(FullModel,'max')
@@ -1473,6 +1513,8 @@ AMF_model = changeRxnBounds(AMF_model,'r1010_e0',1000,'u')
 
 AMF_model = addReaction(AMF_model,'ammonium_uptake','reactionFormula','-> m0110[c0]')
 
+
+
 Early_RGR_noBacteroidwithAMF = {}
 Mid_RGR_noBacteroidwithAMF = {}
 Late_RGR_noBacteroidwithAMF = {}
@@ -1771,12 +1813,12 @@ for b=1:numel(all_sets)
                 if isnan(solution.f)
                     disp('Trying again')
                     changeCobraSolver('gurobi')
-                    solution = optimizeCbModel(AMFWithBacteroid,'max','one',0) % change 1 to 0 if not work
+                    solution = optimizeCbModel(AMFWithBacteroid,'max','one',1)
                     changeCobraSolver('ibm_cplex')
                     if isnan(solution.f)
                         disp('Trying one last time')
                         changeCobraSolver('glpk')
-                        solution = optimizeCbModel(AMFWithBacteroid,'max','one',0)
+                        solution = optimizeCbModel(AMFWithBacteroid,'max','one',1)
                         changeCobraSolver('ibm_cplex')
                     end
                 end
@@ -2127,6 +2169,8 @@ end
 %% Biomass coefficients calculator
 
 function [Nitro_coef, Carbo_coef, Lipid_coef, Lignin_coef, Organic_coef, Materials_coef] = calculateBiomassCoefs(Desired_CN)
+    global Carbo_proportion Lipid_proportion Lignin_proportion Organic_proportion Materials_proportion
+    global Desired_CN
 
     % Base stoichiometry
 
@@ -2146,12 +2190,12 @@ function [Nitro_coef, Carbo_coef, Lipid_coef, Lignin_coef, Organic_coef, Materia
     Y = EE_C / ((Desired_CN*N_N)-N_N+EE_C)
     X = 1-Y
 
-    Carbo_proportion = 0.73376623 %(VARY FOR SENSITIVITY)
-    Lipid_proportion = 0.03246753 %(VARY FOR SENSITIVITY)
-    Lignin_proportion = 0.1038961 %(VARY FOR SENSITIVITY)
-    Organic_proportion = 0.06493506 %(VARY FOR SENSITIVITY)
-    Materials_proportion = 0.06493506 %(VARY FOR SENSITIVITY)
-
+    % Carbo_proportion = 0.73376623 %(VARY FOR SENSITIVITY)
+    % Lipid_proportion = 0.03246753 %(VARY FOR SENSITIVITY)
+    % Lignin_proportion = 0.1038961 %(VARY FOR SENSITIVITY)
+    % Organic_proportion = 0.06493506 %(VARY FOR SENSITIVITY)
+    % Materials_proportion = 0.06493506 %(VARY FOR SENSITIVITY)
+    % 
     % New coefficients
 
     New_nitro = Y
