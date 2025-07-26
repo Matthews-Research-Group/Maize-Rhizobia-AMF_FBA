@@ -8,6 +8,7 @@ Model files, analysis scripts, datasets, and figure generation scripts for the M
 1. *ArabidopsisCoreModel.xml* - Arabidopsis thaliana core metabolism reconstruction (from: 10.1104/pp.114.235358)
 2. *BdiazoModel.xml* - Bradyrhizobium diazoefficiens metabolic reconstruction (from: 10.1039/C6MB00553E)
 3. *iRi1574.xml* - Rhizophagus irregularis metabolic reconstruction (from: 10.1128/msystems.01216-21)
+4. *NVary_results.zip* - Monte Carlo sampling results for estimating variation in growth rate benefits.
 ### Scripts and Functions
 1. *Main_Analysis_Script.m* - MATLAB analysis script to run all four models with default parameter values.
 2. *run_analysis.m* - MATLAB function that actually runs the analysis.
@@ -17,24 +18,25 @@ Model files, analysis scripts, datasets, and figure generation scripts for the M
 6. *modifyGlobalVariable.m* - MATLAB function that modifies base parameter values.
 7. *Plotting.ipynb* - Generates all plots except for sensitivity analysis.
 8. *Sens_plotting.ipynb* - Generates sensitivity analysis figure
+9. *Summarization_Code_Updated.m* - Summarizes Monte Carlo results from the *Nvary_results.zip* file.
 ### Datasets
 #### Figure plotting datasets
-1. *AMF_Heatmap_Data.xlsx* - Results for the AMF growth rate improvement heatmap (seedling time point)
-2. *AMF_Heatmap_Data_Late.xlsx* - Results for the AMF growth rate improvement heatmap (silking time point)
-3. *AMF_Heatmap_Data_Mid.xlsx* - Results for the AMF growth rate improvement heatmap (jointing time point)
-4. *AMF_Late_PercentAllocation.xlsx* - Results for the AMF carbon allocation heatmap (silking time point)
-5. *AMF_Mid_PercentAllocation.xlsx* - Results for the AMF carbon allocation heatmap (jointing time point)
-6. *AMF_Seedling_PercentAllocation.xlsx* - Results for the AMF carbon allocation heatmap (seedling time point)
-7. *Early_Additive.xlsx* - Additive growth benefit in the AMF+nodule model (seedling time point)
-8. *Early_Modeled.xlsx* - Modeled growth benefit in the AMF+nodule model (seedling time point)
-9. *Early_Synergy.xlsx* - Calculated synergy in the AMF+nodule model (seedling time point)
-10. *Late_Additive.xlsx* - Additive growth benefit in the AMF+nodule model (silking time point)
-11. *Late_Modeled.xlsx* - Modeled growth benefit in the AMF+nodule model (silking time point)
-12. *Late_Synergy.xlsx* - Calculated synergy in the AMF+nodule model (silking time point)
-13. *Mid_Additive.xlsx* - Additive growth benefit in the AMF+nodule model (jointing time point)
-14. *Mid_Modeled.xlsx* - Modeled growth benefit in the AMF+nodule model (jointint time point)
-15. *Mid_Synergy.xlsx* - Calculated synergy in the AMF+nodule model (jointing time point)
-16. *NoduleBenefitsTable.xlsx* - Nodule-mediated growth benefits across N availability
+1. *AMF_Heatmap_Data_Updated620.xlsx* - Results for the AMF growth rate improvement heatmap (seedling time point)
+2. *AMF_Heatmap_Data_Late_Updated620.xlsx* - Results for the AMF growth rate improvement heatmap (silking time point)
+3. *AMF_Heatmap_Data_Mid_Updated620.xlsx* - Results for the AMF growth rate improvement heatmap (jointing time point)
+4. *AMF_Late_PercentAllocation_Updated620.xlsx* - Results for the AMF carbon allocation heatmap (silking time point)
+5. *AMF_Mid_PercentAllocation_Updated620.xlsx* - Results for the AMF carbon allocation heatmap (jointing time point)
+6. *AMF_Seedling_PercentAllocation_Updated620.xlsx* - Results for the AMF carbon allocation heatmap (seedling time point)
+7. *Early_Additive_Updated620.xlsx* - Additive growth benefit in the AMF+nodule model (seedling time point)
+8. *Early_Modeled_Updated620.xlsx* - Modeled growth benefit in the AMF+nodule model (seedling time point)
+9. *Early_Synergy_Updated620.xlsx* - Calculated synergy in the AMF+nodule model (seedling time point)
+10. *Late_Additive_Updated620.xlsx* - Additive growth benefit in the AMF+nodule model (silking time point)
+11. *Late_Modeled_Updated620.xlsx* - Modeled growth benefit in the AMF+nodule model (silking time point)
+12. *Late_Synergy_Updated620.xlsx* - Calculated synergy in the AMF+nodule model (silking time point)
+13. *Mid_Additive_Updated620.xlsx* - Additive growth benefit in the AMF+nodule model (jointing time point)
+14. *Mid_Modeled_Updated620.xlsx* - Modeled growth benefit in the AMF+nodule model (jointint time point)
+15. *Mid_Synergy_Updated620.xlsx* - Calculated synergy in the AMF+nodule model (jointing time point)
+16. *Plotting_Benefits_Nodule.xlsx* - Nodule-mediated growth benefits across N availability
 #### Full results files and sensitivity analysis inputs
 1. *results_AMFGAM.mat* - Full results for AMF GAM parameter.
 2. *results_AMFNGAM.mat* - Full results for the AMF NGAM parameter.
