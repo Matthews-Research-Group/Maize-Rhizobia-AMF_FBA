@@ -9,9 +9,9 @@ Model files, analysis scripts, datasets, and figure generation scripts for the M
 2. *BdiazoModel.xml* - Bradyrhizobium diazoefficiens metabolic reconstruction (from: 10.1039/C6MB00553E)
 3. *iRi1574.xml* - Rhizophagus irregularis metabolic reconstruction (from: 10.1128/msystems.01216-21)
 ### Scripts and Functions
-1. *RunSingle.m* - MATLAB analysis script to run all four models with default parameter values.
+1. *Main_Analysis_Script.m* - MATLAB analysis script to run all four models with default parameter values.
 2. *run_analysis.m* - MATLAB function that actually runs the analysis.
-3. *run_analysis_abbrev.m* - Same as above, but leaves out some analyses that are not used in the study.
+3. *run_analysis_abbrev_corrected.m* - Same as above, but leaves out some analyses that are not used in the study.
 4. *Analysis_Script_JRRV1_parallel.m* - MATLAB analysis script to run sensitivity analysis on all four models.
 5. *assignResults.m* - MATLAB function that helps with generating results files.
 6. *modifyGlobalVariable.m* - MATLAB function that modifies base parameter values.
