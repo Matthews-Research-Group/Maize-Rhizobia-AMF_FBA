@@ -85,11 +85,11 @@ Zm_model = addReaction(Zm_model,'R00776','reactionFormula','Ureidoglycolate[c] -
 Zm_model = addReaction(Zm_model,'CM_Urea_Transporters','reactionFormula','urea[c] -> urea[m]')
 
 Zm_model = addReaction(Zm_model,'Oxalate_synthesis','reactionFormula','For[h] + CO2[h] -> Oxalate[h]')
-Zm_model = addReaction(Zm_model,'UDPGlucuronic_acid_synthesis','reactionFormula','UDPG[c] + 2 NADPH[c] -> UDP-Glucuronic_acid[c] + 2 NADP[c]')
+Zm_model = addReaction(Zm_model,'UDPGlucuronic_acid_synthesis','reactionFormula','UDPG[c] + 2 NADP[c] -> UDP-Glucuronic_acid[c] + 2 NADPH[c] + 2 H[c]')
 Zm_model = addReaction(Zm_model,'UDPGalactose_synthesis','reactionFormula','UDPG[c] -> UDP-Galactose[c]')
 Zm_model = addReaction(Zm_model,'UDPXylose_biosynthesis','reactionFormula','UDP-Glucuronic_acid[c] -> UDP-Xylose[c]')
-Zm_model = addReaction(Zm_model,'UDP-Arabinose_biosynthesis','reactionFormula','UDP-Xylose[c] -> UDP-Arabinose[c]')
-Zm_model = changeRxnBounds(Zm_model,'UDP-Arabinose_biosynthesis',-1000,'l')
+Zm_model = addReaction(Zm_model,'UDP-Arabinose_biosynthesis','reactionFormula','UDP-Xylose[c] -> UDP-Arabinose[c] + CO2[c]')
+%Zm_model = changeRxnBounds(Zm_model,'UDP-Arabinose_biosynthesis',-1000,'l')
 
 Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_biosynthesis','reactionFormula','F6P[c] -> M6P[c]')
 Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_dephosphorylation','reactionFormula','M6P[c] + ADP[c] -> Mannose[c] + ATP[c]')
@@ -100,8 +100,8 @@ Zm_model = addReaction(Zm_model,'Glycerol_biosynthesis','reactionFormula','G3P[h
 Zm_model = addReaction(Zm_model,'Arabinose-1-phosphate_biosynthesis','reactionFormula','UDP-Arabinose[c] + PPi[c] -> H[c] + Arabinose-1-phosphate[c] + UTP[c]')
 Zm_model = addReaction(Zm_model,'Arabinose_biosynthesis','reactionFormula','Arabinose-1-phosphate[c] + ADP[c] -> Arabinose[c] + ATP[c]')
 
-Zm_model = addReaction(Zm_model,'Xylose-1-phosphate_biosynthesis','reactionFormula','UDP-Xylose[c] + PPi[c] <=> H[c] + Xylose-1-phosphate[c] + UTP[c]')
-Zm_model = addReaction(Zm_model,'Xylose_biosynthesis','reactionFormula','Xylose-1-phosphate[c] + ADP[c] -> Xylose[c] + ATP[c]')
+Zm_model = addReaction(Zm_model,'beta_d_xylan_biosynthesis','reactionFormula','UDP-Xylose[c] <=> UDP[c] + beta_d_xylan[c]')
+Zm_model = addReaction(Zm_model,'xylan 1,4-beta-xylosidase','reactionFormula','beta_d_xylan[c] -> H2O[c] + Xylose[c]')
 
 Zm_model = addReaction(Zm_model,'Galactose-1-phosphate_biosynthesis','reactionFormula','UDP-Galactose[c] + PPi[c] <=> H[c] + Galactose-1-phosphate[c] + UTP[c]')
 Zm_model = addReaction(Zm_model,'Galactose_biosynthesis','reactionFormula','Galactose-1-phosphate[c] + ADP[c] -> Galactose[c] + ATP[c]')
@@ -153,7 +153,7 @@ solution = optimizeCbModel(Zm_model,'max','one')
 
 % Disabling transporters and reactions to force NADP-ME 
 
-Zm_model = addReaction(Zm_model,'NewBiomass','reactionFormula','1.757 Nitrogeneous_compounds[c] + 4.415 Carbohydrates[c] + 0.079 Lipids[c] + 0.453 Lignin[c] + 0.339 Organic_acids[c] + 30 ATP[c] --> Biomass[e] + 30 ADP[c] + 30 Pi[c]')
+Zm_model = addReaction(Zm_model,'NewBiomass','reactionFormula','1.757 Nitrogeneous_compounds[c] + 4.415 Carbohydrates[c] + 0.079 Lipids[c] + 0.453 Lignin[c] + 0.339 Organic_acids[c] + 19 ATP[c] --> Biomass[e] + 19 ADP[c] + 19 Pi[c]')
 
 Zm_model = changeRxnBounds(Zm_model,'G6PDH_h',0,'b')
 Zm_model = changeRxnBounds(Zm_model,'PPIF6PK_c',0,'b')
@@ -185,7 +185,7 @@ CombinedModel = addReaction(CombinedModel,'BS_ATPM','reactionFormula','BS_Glc[c]
 CombinedModel = addReaction(CombinedModel,'M_ATPM','reactionFormula','M_Glc[c] + 6 M_O2[c] -> 6 M_CO2[c] + + 6 M_H2O[c] + ShootATPM[c]')
 CombinedModel = addReaction(CombinedModel,'Shoot_ATPM_Drain','reactionFormula','ShootATPM[c] ->')
 
-CombinedModel = changeRxnBounds(CombinedModel,'Shoot_ATPM_Drain',0.204,'l')
+CombinedModel = changeRxnBounds(CombinedModel,'Shoot_ATPM_Drain',0.18,'l')
 
 % Creating transports between mesophyll and bundle sheath cells
 
@@ -237,6 +237,14 @@ CombinedModel = addReaction(CombinedModel,'DummyPhoton_sink','reactionFormula','
 CombinedModel = changeRxnBounds(CombinedModel,'DummyPhoton_sink',70.08,'u')
 CombinedModel = changeRxnBounds(CombinedModel,'DummyPhoton_sink',0,'l')
 
+% Disallow MalDH1 activity and PEPC1
+
+CombinedModel = changeRxnBounds(CombinedModel,'BS_MalDH1_m',0,'l')
+CombinedModel = changeRxnBounds(CombinedModel,'BS_MalDH1_m',0,'u')
+CombinedModel = changeRxnBounds(CombinedModel,'BS_PEPC1_c',0,'l')
+CombinedModel = changeRxnBounds(CombinedModel,'BS_PEPC1_c',0,'u')
+CombinedModel = changeRxnBounds(CombinedModel,'BS_MalDH2NADP_c',0,'l')
+CombinedModel = changeRxnBounds(CombinedModel,'BS_MalDH2NADP_c',1000,'u')
 
 CombinedModel = changeObjective(CombinedModel,'EX_Total_Shoot_Biomass')
 solution = optimizeCbModel(CombinedModel,'max','one')
@@ -312,6 +320,10 @@ CombinedModel = addReaction(CombinedModel,'EX_Total_Plant_Biomass','reactionForm
 CombinedModel = changeObjective(CombinedModel,'Total_plant_biomass')
 solution = optimizeCbModel(CombinedModel,'max','one')
 
+%%
+
+%%
+
 % Making the nodule to associate with the bacteroid
 
 Bd_model = readCbModel('BdiazoModel.xml')
@@ -373,9 +385,9 @@ Zm_model = addReaction(Zm_model,'R00776','reactionFormula','Ureidoglycolate[c] -
 Zm_model = addReaction(Zm_model,'CM_Urea_Transporters','reactionFormula','urea[c] -> urea[m]')
 
 Zm_model = addReaction(Zm_model,'Oxalate_synthesis','reactionFormula','For[h] + CO2[h] -> Oxalate[h]')
-Zm_model = addReaction(Zm_model,'UDPGlucuronic_acid_synthesis','reactionFormula','UDPG[c] + 2 NADPH[c] -> UDP-Glucuronic_acid[c] + 2 NADP[c]')
+Zm_model = addReaction(Zm_model,'UDPGlucuronic_acid_synthesis','reactionFormula','UDPG[c] + 2 NADP[c] -> UDP-Glucuronic_acid[c] + 2 NADPH[c] + 2 H[c]')
 Zm_model = addReaction(Zm_model,'UDPGalactose_synthesis','reactionFormula','UDPG[c] -> UDP-Galactose[c]')
-Zm_model = addReaction(Zm_model,'UDPXylose_biosynthesis','reactionFormula','UDP-Glucuronic_acid[c] -> UDP-Xylose[c]')
+Zm_model = addReaction(Zm_model,'UDPXylose_biosynthesis','reactionFormula','UDP-Glucuronic_acid[c] -> UDP-Xylose[c] + CO2[c]')
 Zm_model = addReaction(Zm_model,'UDP-Arabinose_biosynthesis','reactionFormula','UDP-Xylose[c] -> UDP-Arabinose[c]')
 Zm_model = changeRxnBounds(Zm_model,'UDP-Arabinose_biosynthesis',-1000,'l')
 
@@ -388,8 +400,8 @@ Zm_model = addReaction(Zm_model,'Glycerol_biosynthesis','reactionFormula','G3P[h
 Zm_model = addReaction(Zm_model,'Arabinose-1-phosphate_biosynthesis','reactionFormula','UDP-Arabinose[c] + PPi[c] -> H[c] + Arabinose-1-phosphate[c] + UTP[c]')
 Zm_model = addReaction(Zm_model,'Arabinose_biosynthesis','reactionFormula','Arabinose-1-phosphate[c] + ADP[c] -> Arabinose[c] + ATP[c]')
 
-Zm_model = addReaction(Zm_model,'Xylose-1-phosphate_biosynthesis','reactionFormula','UDP-Xylose[c] + PPi[c] <=> H[c] + Xylose-1-phosphate[c] + UTP[c]')
-Zm_model = addReaction(Zm_model,'Xylose_biosynthesis','reactionFormula','Xylose-1-phosphate[c] + ADP[c] -> Xylose[c] + ATP[c]')
+Zm_model = addReaction(Zm_model,'beta_d_xylan_biosynthesis','reactionFormula','UDP-Xylose[c] <=> UDP[c] + beta_d_xylan[c]')
+Zm_model = addReaction(Zm_model,'xylan 1,4-beta-xylosidase','reactionFormula','beta_d_xylan[c] -> H2O[c] + Xylose[c]')
 
 Zm_model = addReaction(Zm_model,'Galactose-1-phosphate_biosynthesis','reactionFormula','UDP-Galactose[c] + PPi[c] <=> H[c] + Galactose-1-phosphate[c] + UTP[c]')
 Zm_model = addReaction(Zm_model,'Galactose_biosynthesis','reactionFormula','Galactose-1-phosphate[c] + ADP[c] -> Galactose[c] + ATP[c]')
@@ -442,6 +454,8 @@ Zm_model = changeRxnBounds(Zm_model,'NewBiomass',1000,'u')
 Zm_model = changeRxnBounds(Zm_model,'NewBiomass',0,'l')
 
 solution = optimizeCbModel(Zm_model,'max','one')
+
+
 
 Zm_model = addReaction(Zm_model,'ATPM','ATP[c] + H2O[c] -> ADP[c] + Pi[c]')
 Zm_model = changeRxnBounds(Zm_model,'ATPM',7.36*0.02,'l')
@@ -1112,7 +1126,7 @@ Fixation_flux = find(contains(NoBacteroidModel.rxns,{'Bacteroid_NIT'}))
 CO2_efflux = find(contains(NoBacteroidModel.rxns,{'Nodule_Im_CO2'}))
 Other_efflux = find(contains(NoBacteroidModel.rxns,{'NoduleTR_reverse_CO2[c]'}))
 
-for b=1:numel(all_sets)
+for b=1%:numel(all_sets)
     working_set = all_sets{b}
     S_set = working_set{1}
     R_set = working_set{2}
@@ -1742,19 +1756,51 @@ for b=1:numel(all_sets)
                 N_uptake = find(contains(AMFWithBacteroid.rxns,{'R_Im_NH4'})) 
                 AMF_biomass_index = find(contains(AMFWithBacteroid.rxns,{'r1067_c0'}))
                 
-                solution = optimizeCbModel(AMFWithBacteroid,'max','one')
+                solution = optimizeCbModel(AMFWithBacteroid,'max','one',1)
                 if isnan(solution.f)
                     disp('Trying again')
                     changeCobraSolver('gurobi')
-                    solution = optimizeCbModel(AMFWithBacteroid,'max','one')
+                    solution = optimizeCbModel(AMFWithBacteroid,'max','one',1)
                     changeCobraSolver('ibm_cplex')
                     if isnan(solution.f)
-                        disp('Trying one last time')
+                        disp('Trying again')
                         changeCobraSolver('glpk')
-                        solution = optimizeCbModel(AMFWithBacteroid,'max','one')
+                        solution = optimizeCbModel(AMFWithBacteroid,'max','one',1)
                         changeCobraSolver('ibm_cplex')
+                        if isnan(solution.f)
+                            disp('Trying again')
+                            changeCobraSolver('ibm_cplex')
+                            solution = optimizeCbModel(AMFWithBacteroid,'max','one',0)
+                            changeCobraSolver('ibm_cplex')
+                            if isnan(solution.f)
+                                disp('Trying again')
+                                changeCobraSolver('gurobi')
+                                solution = optimizeCbModel(AMFWithBacteroid,'max','one',0)
+                                changeCobraSolver('ibm_cplex')
+                                if isnan(solution.f)
+                                    disp('Trying again')
+                                    changeCobraSolver('glpk')
+                                    solution = optimizeCbModel(AMFWithBacteroid,'max','one',0)
+                                    changeCobraSolver('ibm_cplex')
+                                end
+                            end
+                        end
                     end
                 end
+                
+                %solution = optimizeCbModel(AMFWithBacteroid,'max','one')
+                %if isnan(solution.f)
+                %    disp('Trying again')
+                %    changeCobraSolver('gurobi')
+                %    solution = optimizeCbModel(AMFWithBacteroid,'max','one')
+                %    changeCobraSolver('ibm_cplex')
+                %    if isnan(solution.f)
+                %        disp('Trying one last time')
+                %        changeCobraSolver('glpk')
+                %        solution = optimizeCbModel(AMFWithBacteroid,'max','one')
+                %        changeCobraSolver('ibm_cplex')
+                %    end
+                %end
                 
                 Early_RGR_WithBacteroidwithAMF{i,n} = solution.f
 
@@ -1926,6 +1972,8 @@ AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1067_c0',0,'u')
 AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r0066_c0',0,'b')
 solution = optimizeCbModel(AMFNoBacteroid,'max','one')
 
+%%
+
 changeCobraSolver('ibm_cplex')
 
 AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'AMF_Pi_TR',0,'b')
@@ -1978,7 +2026,7 @@ for i=1:numel(N_levels)
     for n=1:numel(P_levels)
         AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'R_Im_NH4',N_levels_mid(i),'u')
         AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'R_Im_Pi',P_levels_mid(n),'u')
-        solution = optimizeCbModel(AMFNoBacteroid,'max')
+        solution = optimizeCbModel(AMFNoBacteroid,'max','one')
         Growth_mid{i,n} = solution.f
     end
 end
@@ -2001,7 +2049,7 @@ for i=1:numel(N_levels)
     for n=1:numel(P_levels)
         AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'R_Im_NH4',N_levels_late(i),'u')
         AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'R_Im_Pi',P_levels_late(n),'u')
-        solution = optimizeCbModel(AMFNoBacteroid,'max')
+        solution = optimizeCbModel(AMFNoBacteroid,'max','one')
         Growth_late{i,n} = solution.f
     end
 end
@@ -2017,9 +2065,9 @@ AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'AMF_Pi_TR',1000,'u')
 AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'AMF_NH4_TR',1000,'u')
 AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'ammonium_uptake',1000,'u')
 
-AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1574_e0',0,'u') % H plus sink
+AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1574_e0',1000,'u') % H plus sink
 AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1574_e0',0,'l')
-AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1010_e0',0,'u') % H plus sink
+AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1010_e0',1000,'u') % H plus sink
 AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1010_e0',0,'l')
 
 original_AMF_model = AMFNoBacteroid
@@ -2027,8 +2075,8 @@ original_AMF_model = AMFNoBacteroid
 
 AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1574_e0',1000,'u') % H plus sink
 AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1574_e0',0,'l')
-AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1010_e0',0,'u') % H plus sink
-AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1010_e0',-1000,'l')
+AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1010_e0',1000,'u') % H plus sink
+AMFNoBacteroid = changeRxnBounds(AMFNoBacteroid,'r1010_e0',0,'l')
 
 original_AMF_model = AMFNoBacteroid
 
@@ -2195,6 +2243,12 @@ for b=1:numel(all_sets)
                         changeCobraSolver('glpk')
                         solution = optimizeCbModel(AMFNoBacteroid,'max','one',1)
                         changeCobraSolver('ibm_cplex')
+                        if isnan(solution.f)
+                            disp('Trying one last time')
+                            changeCobraSolver('ibm_cplex')
+                            solution = optimizeCbModel(AMFNoBacteroid,'max','one',0)
+                            changeCobraSolver('ibm_cplex')
+                        end
                     end
                 end
                 Late_RGR_noBacteroidwithAMF{i,n} = solution.f

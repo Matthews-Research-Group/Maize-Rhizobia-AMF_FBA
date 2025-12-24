@@ -31,6 +31,8 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
     NoduleProportion, AMF_N_Benefit, AMF_P_Benefit, ...
     NecessaryAMFBiomass, AMFGAM, AMFNGAM, TransportCost] = parameters{:};
     
+    TransportCost = round(TransportCost,3) % New
+
     ShootProportion = 1 - RootProportion;
     PlantProportion = 1 - NoduleProportion;
     
@@ -94,24 +96,24 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
     Zm_model = addReaction(Zm_model,'CM_Urea_Transporters','reactionFormula','urea[c] -> urea[m]');
 
     Zm_model = addReaction(Zm_model,'Oxalate_synthesis','reactionFormula','For[h] + CO2[h] -> Oxalate[h]');
-    Zm_model = addReaction(Zm_model,'UDPGlucuronic_acid_synthesis','reactionFormula','UDPG[c] + 2 NADPH[c] -> UDP-Glucuronic_acid[c] + 2 NADP[c]');
-    Zm_model = addReaction(Zm_model,'UDPGalactose_synthesis','reactionFormula','UDPG[c] -> UDP-Galactose[c]');
-    Zm_model = addReaction(Zm_model,'UDPXylose_biosynthesis','reactionFormula','UDP-Glucuronic_acid[c] -> UDP-Xylose[c]');
-    Zm_model = addReaction(Zm_model,'UDP-Arabinose_biosynthesis','reactionFormula','UDP-Xylose[c] -> UDP-Arabinose[c]');
-    Zm_model = changeRxnBounds(Zm_model,'UDP-Arabinose_biosynthesis',-1000,'l');
+    Zm_model = addReaction(Zm_model,'UDPGlucuronic_acid_synthesis','reactionFormula','UDPG[c] + 2 NADP[c] -> UDP-Glucuronic_acid[c] + 2 NADPH[c] + 2 H[c]')
+    Zm_model = addReaction(Zm_model,'UDPGalactose_synthesis','reactionFormula','UDPG[c] -> UDP-Galactose[c]')
+    Zm_model = addReaction(Zm_model,'UDPXylose_biosynthesis','reactionFormula','UDP-Glucuronic_acid[c] -> UDP-Xylose[c]')
+    Zm_model = addReaction(Zm_model,'UDP-Arabinose_biosynthesis','reactionFormula','UDP-Xylose[c] -> UDP-Arabinose[c] + CO2[c]')
+    %Zm_model = changeRxnBounds(Zm_model,'UDP-Arabinose_biosynthesis',-1000,'l')
 
-    Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_biosynthesis','reactionFormula','F6P[c] -> M6P[c]');
-    Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_dephosphorylation','reactionFormula','M6P[c] + ADP[c] -> Mannose[c] + ATP[c]');
-    Zm_model = addReaction(Zm_model,'UDP-Galacturonate_synthesis','reactionFormula','UDP-Arabinose[c] + CO2[c] -> UDP-Galacturonate[c]');
-    Zm_model = addReaction(Zm_model,'G3P_biosynthesis','reactionFormula','DHAP[h] + NADH[h] -> NAD[h] + G3P[h]');
-    Zm_model = addReaction(Zm_model,'Glycerol_biosynthesis','reactionFormula','G3P[h] -> Glycerol[h] + Pi[h]');
+    Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_biosynthesis','reactionFormula','F6P[c] -> M6P[c]')
+    Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_dephosphorylation','reactionFormula','M6P[c] + ADP[c] -> Mannose[c] + ATP[c]')
+    Zm_model = addReaction(Zm_model,'UDP-Galacturonate_synthesis','reactionFormula','UDP-Arabinose[c] + CO2[c] -> UDP-Galacturonate[c]')
+    Zm_model = addReaction(Zm_model,'G3P_biosynthesis','reactionFormula','DHAP[h] + NADH[h] -> NAD[h] + G3P[h]')
+    Zm_model = addReaction(Zm_model,'Glycerol_biosynthesis','reactionFormula','G3P[h] -> Glycerol[h] + Pi[h]')
 
-    Zm_model = addReaction(Zm_model,'Arabinose-1-phosphate_biosynthesis','reactionFormula','UDP-Arabinose[c] + PPi[c] -> H[c] + Arabinose-1-phosphate[c] + UTP[c]');
-    Zm_model = addReaction(Zm_model,'Arabinose_biosynthesis','reactionFormula','Arabinose-1-phosphate[c] + ADP[c] -> Arabinose[c] + ATP[c]');
-
-    Zm_model = addReaction(Zm_model,'Xylose-1-phosphate_biosynthesis','reactionFormula','UDP-Xylose[c] + PPi[c] <=> H[c] + Xylose-1-phosphate[c] + UTP[c]');
-    Zm_model = addReaction(Zm_model,'Xylose_biosynthesis','reactionFormula','Xylose-1-phosphate[c] + ADP[c] -> Xylose[c] + ATP[c]');
-
+    Zm_model = addReaction(Zm_model,'Arabinose-1-phosphate_biosynthesis','reactionFormula','UDP-Arabinose[c] + PPi[c] -> H[c] + Arabinose-1-phosphate[c] + UTP[c]')
+    Zm_model = addReaction(Zm_model,'Arabinose_biosynthesis','reactionFormula','Arabinose-1-phosphate[c] + ADP[c] -> Arabinose[c] + ATP[c]')
+    
+    Zm_model = addReaction(Zm_model,'beta_d_xylan_biosynthesis','reactionFormula','UDP-Xylose[c] <=> UDP[c] + beta_d_xylan[c]')
+    Zm_model = addReaction(Zm_model,'xylan 1,4-beta-xylosidase','reactionFormula','beta_d_xylan[c] -> H2O[c] + Xylose[c]')
+    
     Zm_model = addReaction(Zm_model,'Galactose-1-phosphate_biosynthesis','reactionFormula','UDP-Galactose[c] + PPi[c] <=> H[c] + Galactose-1-phosphate[c] + UTP[c]');
     Zm_model = addReaction(Zm_model,'Galactose_biosynthesis','reactionFormula','Galactose-1-phosphate[c] + ADP[c] -> Galactose[c] + ATP[c]');
 
@@ -247,7 +249,14 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
     CombinedModel = changeRxnBounds(CombinedModel,'DummyPhoton_sink',70.08,'u');
     CombinedModel = changeRxnBounds(CombinedModel,'DummyPhoton_sink',0,'l');
 
-
+    CombinedModel = changeRxnBounds(CombinedModel,'BS_MalDH1_m',0,'l')
+    CombinedModel = changeRxnBounds(CombinedModel,'BS_MalDH1_m',0,'u')
+    CombinedModel = changeRxnBounds(CombinedModel,'BS_PEPC1_c',0,'l')
+    CombinedModel = changeRxnBounds(CombinedModel,'BS_PEPC1_c',0,'u')
+    CombinedModel = changeRxnBounds(CombinedModel,'BS_MalDH2NADP_c',0,'l')
+    CombinedModel = changeRxnBounds(CombinedModel,'BS_MalDH2NADP_c',1000,'u')
+    
+    
     CombinedModel = changeObjective(CombinedModel,'EX_Total_Shoot_Biomass');
     solution = optimizeCbModel(CombinedModel,'max','one');
 
@@ -383,24 +392,24 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
     Zm_model = addReaction(Zm_model,'CM_Urea_Transporters','reactionFormula','urea[c] -> urea[m]');
 
     Zm_model = addReaction(Zm_model,'Oxalate_synthesis','reactionFormula','For[h] + CO2[h] -> Oxalate[h]');
-    Zm_model = addReaction(Zm_model,'UDPGlucuronic_acid_synthesis','reactionFormula','UDPG[c] + 2 NADPH[c] -> UDP-Glucuronic_acid[c] + 2 NADP[c]');
-    Zm_model = addReaction(Zm_model,'UDPGalactose_synthesis','reactionFormula','UDPG[c] -> UDP-Galactose[c]');
-    Zm_model = addReaction(Zm_model,'UDPXylose_biosynthesis','reactionFormula','UDP-Glucuronic_acid[c] -> UDP-Xylose[c]');
-    Zm_model = addReaction(Zm_model,'UDP-Arabinose_biosynthesis','reactionFormula','UDP-Xylose[c] -> UDP-Arabinose[c]');
-    Zm_model = changeRxnBounds(Zm_model,'UDP-Arabinose_biosynthesis',-1000,'l');
+    Zm_model = addReaction(Zm_model,'UDPGlucuronic_acid_synthesis','reactionFormula','UDPG[c] + 2 NADP[c] -> UDP-Glucuronic_acid[c] + 2 NADPH[c] + 2 H[c]')
+    Zm_model = addReaction(Zm_model,'UDPGalactose_synthesis','reactionFormula','UDPG[c] -> UDP-Galactose[c]')
+    Zm_model = addReaction(Zm_model,'UDPXylose_biosynthesis','reactionFormula','UDP-Glucuronic_acid[c] -> UDP-Xylose[c]')
+    Zm_model = addReaction(Zm_model,'UDP-Arabinose_biosynthesis','reactionFormula','UDP-Xylose[c] -> UDP-Arabinose[c] + CO2[c]')
+    %Zm_model = changeRxnBounds(Zm_model,'UDP-Arabinose_biosynthesis',-1000,'l')
 
-    Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_biosynthesis','reactionFormula','F6P[c] -> M6P[c]');
-    Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_dephosphorylation','reactionFormula','M6P[c] + ADP[c] -> Mannose[c] + ATP[c]');
-    Zm_model = addReaction(Zm_model,'UDP-Galacturonate_synthesis','reactionFormula','UDP-Arabinose[c] + CO2[c] -> UDP-Galacturonate[c]');
-    Zm_model = addReaction(Zm_model,'G3P_biosynthesis','reactionFormula','DHAP[h] + NADH[h] -> NAD[h] + G3P[h]');
-    Zm_model = addReaction(Zm_model,'Glycerol_biosynthesis','reactionFormula','G3P[h] -> Glycerol[h] + Pi[h]');
+    Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_biosynthesis','reactionFormula','F6P[c] -> M6P[c]')
+    Zm_model = addReaction(Zm_model,'Mannose-6-phosphate_dephosphorylation','reactionFormula','M6P[c] + ADP[c] -> Mannose[c] + ATP[c]')
+    Zm_model = addReaction(Zm_model,'UDP-Galacturonate_synthesis','reactionFormula','UDP-Arabinose[c] + CO2[c] -> UDP-Galacturonate[c]')
+    Zm_model = addReaction(Zm_model,'G3P_biosynthesis','reactionFormula','DHAP[h] + NADH[h] -> NAD[h] + G3P[h]')
+    Zm_model = addReaction(Zm_model,'Glycerol_biosynthesis','reactionFormula','G3P[h] -> Glycerol[h] + Pi[h]')
 
-    Zm_model = addReaction(Zm_model,'Arabinose-1-phosphate_biosynthesis','reactionFormula','UDP-Arabinose[c] + PPi[c] -> H[c] + Arabinose-1-phosphate[c] + UTP[c]');
-    Zm_model = addReaction(Zm_model,'Arabinose_biosynthesis','reactionFormula','Arabinose-1-phosphate[c] + ADP[c] -> Arabinose[c] + ATP[c]');
-
-    Zm_model = addReaction(Zm_model,'Xylose-1-phosphate_biosynthesis','reactionFormula','UDP-Xylose[c] + PPi[c] <=> H[c] + Xylose-1-phosphate[c] + UTP[c]');
-    Zm_model = addReaction(Zm_model,'Xylose_biosynthesis','reactionFormula','Xylose-1-phosphate[c] + ADP[c] -> Xylose[c] + ATP[c]');
-
+    Zm_model = addReaction(Zm_model,'Arabinose-1-phosphate_biosynthesis','reactionFormula','UDP-Arabinose[c] + PPi[c] -> H[c] + Arabinose-1-phosphate[c] + UTP[c]')
+    Zm_model = addReaction(Zm_model,'Arabinose_biosynthesis','reactionFormula','Arabinose-1-phosphate[c] + ADP[c] -> Arabinose[c] + ATP[c]')
+    
+    Zm_model = addReaction(Zm_model,'beta_d_xylan_biosynthesis','reactionFormula','UDP-Xylose[c] <=> UDP[c] + beta_d_xylan[c]')
+    Zm_model = addReaction(Zm_model,'xylan 1,4-beta-xylosidase','reactionFormula','beta_d_xylan[c] -> H2O[c] + Xylose[c]')
+    
     Zm_model = addReaction(Zm_model,'Galactose-1-phosphate_biosynthesis','reactionFormula','UDP-Galactose[c] + PPi[c] <=> H[c] + Galactose-1-phosphate[c] + UTP[c]');
     Zm_model = addReaction(Zm_model,'Galactose_biosynthesis','reactionFormula','Galactose-1-phosphate[c] + ADP[c] -> Galactose[c] + ATP[c]');
 
@@ -840,23 +849,27 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
     FullModel = changeRxnBounds(FullModel,'Nodule_Bio_NLim',0,'b');
     FullModel = changeRxnBounds(FullModel,'Nodule_Bio_opt',0,'b');
     FullModel = changeRxnBounds(FullModel,'Nodule_Im_Pi',0,'b');
+    
+    changeCobraSolver('ibm_cplex');
 
     FullModel = changeObjective(FullModel,'EX_FullBiomass');
-    solution = optimizeCbModel(FullModel,'max','one');
+    solution = optimizeCbModel(FullModel,'max','one',1);
 
     %
 
     changeCobraSolver('ibm_cplex');
+
+
     %
     PI_INDEX = find(contains(FullModel.rxns,{'R_Im_Pi'}));
     NH4_INDEX = find(contains(FullModel.rxns,{'R_Im_NH4'}));
-    Pi_max = solution.x(PI_INDEX);
-    NH4_max = solution.x(NH4_INDEX);
+    %Pi_max = solution.x(PI_INDEX);
+    %NH4_max = solution.x(NH4_INDEX);
 
-    P_levels = linspace(0,Pi_max,11);
-    P_levels_AMF = P_levels * 3.16;
-    N_levels = linspace(0,NH4_max,11);
-    N_levels_AMF = N_levels * 1.23;
+    %P_levels = linspace(0,Pi_max,11);
+    %P_levels_AMF = P_levels * 3.16;
+    %N_levels = linspace(0,NH4_max,11);
+    %N_levels_AMF = N_levels * 1.23;
 
     FullModel = changeRxnBounds(FullModel,'R_Im_NH4',1000,'u');
     FullModel = changeRxnBounds(FullModel,'NoduleTR_reverse_NH4[c]',1000,'u');
@@ -1034,10 +1047,13 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
     WithBacteroidModel = addReaction(WithBacteroidModel,'EX_FullBiomass','reactionFormula','FullBiomass[e] ->');
 
     % Preallocate arrays
-
-    Early_RGR_withBacteroidnoAMF = cell(length(N_levels),length(P_levels));
-    Mid_RGR_withBacteroidnoAMF = cell(length(N_levels),length(P_levels));
-    Late_RGR_withBacteroidnoAMF = cell(length(N_levels),length(P_levels));
+    
+    N_levels = N_levels_early
+    P_levels = P_levels_early
+    
+    Early_RGR_withBacteroidnoAMF = cell(length(N_levels_early),length(P_levels_early));
+    Mid_RGR_withBacteroidnoAMF = cell(length(N_levels_early),length(P_levels_early));
+    Late_RGR_withBacteroidnoAMF = cell(length(N_levels_early),length(P_levels_early));
 
     for b=1:numel(all_sets);
         disp(b)
@@ -1057,8 +1073,8 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
         WithBacteroidModel = changeRxnBounds(WithBacteroidModel,'Shoot_ATPM_Drain',PlantNGAM*ShootProportion*PlantProportion,'l');
         WithBacteroidModel = changeRxnBounds(WithBacteroidModel,'R_ATPM',RootNGAM*RootProportion*PlantProportion,'l');
 
-        for i=1:numel(N_levels);
-            for n=2:numel(P_levels);
+        for i=1:numel(N_levels_early);
+            for n=2:numel(P_levels_early);
                 disp(i)
                 disp(n)
 
@@ -1075,6 +1091,19 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
                         changeCobraSolver('gurobi');
                         solution = optimizeCbModel(WithBacteroidModel,'max','one',1);
                         changeCobraSolver('ibm_cplex');
+                        if isnan(solution.f);
+                            disp('Trying again')
+                            changeCobraSolver('glpk');
+                            solution = optimizeCbModel(WithBacteroidModel,'max','one',1);
+                            changeCobraSolver('ibm_cplex');
+                            if isnan(solution.f);
+                                disp('Trying again')
+                                changeCobraSolver('ibm_cplex');
+                                solution = optimizeCbModel(WithBacteroidModel,'max','one',0);
+                                changeCobraSolver('ibm_cplex');
+                                
+                            end
+                        end
                     end
                     Early_RGR_withBacteroidnoAMF{i,n} = solution.f;
                     disp(ShootProportion)
@@ -1091,6 +1120,12 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
                         changeCobraSolver('gurobi');
                         solution = optimizeCbModel(WithBacteroidModel,'max','one',1);
                         changeCobraSolver('ibm_cplex');
+                        if isnan(solution.f);
+                            disp('Trying again')
+                            changeCobraSolver('glpk');
+                            solution = optimizeCbModel(WithBacteroidModel,'max','one',1);
+                            changeCobraSolver('ibm_cplex');
+                        end
                     end
                     Mid_RGR_withBacteroidnoAMF{i,n} = solution.f;            
                     N2_values_mid{i,n} = solution.x(Fixation_flux);
@@ -1106,6 +1141,12 @@ function [RGR_values_combined, CO2_levels, Early_RGR_noBacteroidnoAMF, Mid_RGR_n
                         changeCobraSolver('gurobi');
                         solution = optimizeCbModel(WithBacteroidModel,'max','one',1);
                         changeCobraSolver('ibm_cplex');
+                        if isnan(solution.f);
+                            disp('Trying again')
+                            changeCobraSolver('glpk');
+                            solution = optimizeCbModel(WithBacteroidModel,'max','one',1);
+                            changeCobraSolver('ibm_cplex');
+                        end
                     end
                     Late_RGR_withBacteroidnoAMF{i,n} = solution.f;
 
