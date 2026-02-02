@@ -13,12 +13,13 @@ Model files, analysis scripts, datasets, and figure generation scripts for the M
 1. *Main_Analysis_Script.m* - MATLAB analysis script to run all four models with default parameter values.
 2. *run_analysis.m* - MATLAB function that actually runs the analysis.
 3. *run_analysis_abbrev_corrected.m* - Same as above, but leaves out some analyses that are not used in the study.
-4. *Analysis_Script_JRRV1_parallel.m* - MATLAB analysis script to run sensitivity analysis on all four models.
-5. *assignResults.m* - MATLAB function that helps with generating results files.
-6. *modifyGlobalVariable.m* - MATLAB function that modifies base parameter values.
-7. *Plotting.ipynb* - Generates all plots except for sensitivity analysis.
-8. *Sens_plotting.ipynb* - Generates sensitivity analysis figure
-9. *Summarization_Code_Updated.m* - Summarizes Monte Carlo results from the Monte Carlo results files.
+4. *run_analysis_abbrev_BiomassCorrection.m* - Same as above, but incorporates the ability to add an additional sink for phosphorous, to represent changes in P content between AMF- and AMF+ plants.
+5. *Analysis_Script_JRRV1_parallel.m* - MATLAB analysis script to run sensitivity analysis on all four models.
+6. *assignResults.m* - MATLAB function that helps with generating results files.
+7. *modifyGlobalVariable.m* - MATLAB function that modifies base parameter values.
+8. *Plotting.ipynb* - Generates all plots except for sensitivity analysis.
+9. *Sens_plotting.ipynb* - Generates sensitivity analysis figure
+10. *Summarization_Code_Updated.m* - Summarizes Monte Carlo results from the Monte Carlo results files.
 ### Datasets
 #### Figure plotting datasets
 1. *AMF_Heatmap_Data_Updated620.xlsx* - Results for the AMF growth rate improvement heatmap (seedling time point)
