@@ -18,7 +18,7 @@ Model files, analysis scripts, datasets, and figure generation scripts for the M
 6. *modifyGlobalVariable.m* - MATLAB function that modifies base parameter values.
 7. *Plotting.ipynb* - Generates all plots except for sensitivity analysis.
 8. *Sens_plotting.ipynb* - Generates sensitivity analysis figure
-9. *Summarization_Code_Updated.m* - Summarizes Monte Carlo results from the *Nvary_results.zip* file.
+9. *Summarization_Code_Updated.m* - Summarizes Monte Carlo results from the Monte Carlo results files.
 ### Datasets
 #### Figure plotting datasets
 1. *AMF_Heatmap_Data_Updated620.xlsx* - Results for the AMF growth rate improvement heatmap (seedling time point)
@@ -37,6 +37,9 @@ Model files, analysis scripts, datasets, and figure generation scripts for the M
 14. *Mid_Modeled_Updated620.xlsx* - Modeled growth benefit in the AMF+nodule model (jointint time point)
 15. *Mid_Synergy_Updated620.xlsx* - Calculated synergy in the AMF+nodule model (jointing time point)
 16. *Plotting_Benefits_Nodule.xlsx* - Nodule-mediated growth benefits across N availability
+17. *LowNHighP_Corrected.zip* - Monte Carlo results for generating the 95% confidence interval of RGR benefits in the comparison between model predictions and empirical results in low N high P conditions, accounting for observed increases in biomass P concentration.
+18. *HighNHighP_NotCorrected.zip* - Monte Carlo results for generating the 95% confidence interval of RGR benefits in the comparison between model predictions and empirical results in high N high P conditions, not accounting for observed increases in biomass P concentration.
+19. *HighNHighP_Corrected.zip* - Monte Carlo results for generating the 95% confidence interval of RGR benefits in the comparison between model predictions and empirical results in high N high P conditions, accounting for observed increases in biomass P concentration.
 #### Full results files and sensitivity analysis inputs
 1. *results_AMFGAM.mat* - Full results for AMF GAM parameter.
 2. *results_AMFNGAM.mat* - Full results for the AMF NGAM parameter.
