@@ -2,7 +2,10 @@
 
 ***
 ## Description
-Model files, analysis scripts, datasets, and figure generation scripts for the Maize-Rhizobia-AMF FBA study.
+Model files, analysis scripts, datasets, and figure generation scripts associated with: 
+
+Kaste et al. 2026. Metabolic modeling predicts synergistic growth benefits between arbuscular mycorrhizal fungi and theoretical N2-fixing rhizobia symbiosis in maize. Plant Physiology, 201:kiag327. https://doi.org/10.1093/plphys/kiag327
+
 ## Files 
 ### Models
 1. *ArabidopsisCoreModel.xml* - Arabidopsis thaliana core metabolism reconstruction (from: 10.1104/pp.114.235358)
